@@ -25,6 +25,1357 @@ app.get("/reporte-de-inspeccion", async (req, res) => {
       H: 1,
       I: 1,
     },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
   ];
   let sumA = 0,
     sumB = 0,
@@ -49,7 +1400,7 @@ app.get("/reporte-de-inspeccion", async (req, res) => {
   });
   let pageIndex = 0;
   let pageIndexPdf = 1;
-  
+
   const pageBreakAfter = 20;
   let html = `
   <!DOCTYPE html>
@@ -444,17 +1795,24 @@ app.get("/reporte-de-inspeccion", async (req, res) => {
         </div>
 
         `;
+        let itemsPerPage = 20;
+        let firstPageItems = data.slice(0, itemsPerPage);
+        let remainingItems = data.slice(itemsPerPage);
 
-  data.map((item, index) => {
+  // Procesa los primeros 20 elementos para la primera página
+  firstPageItems.forEach((item, index) => {
+    // Tu lógica para agregar filas a la página aquí...
+
     const itemCount = index + 1;
-
-    if(index === 0){
-      if((index + 1) % 10 === 0 && data.length > 10){
-        pageIndexPdf++;
-      }
+    if (itemCount % itemsPerPage === 0 && itemCount < firstPageItems.length) {
+      html += `</div></div><div class="page-break"></div> `;
+      pageIndex++;
     }
-    
-    const itemsPerPage = pageIndex === 0 ? pageBreakAfter : pageBreakAfter * 2;
+  });
+  // Ahora cambia itemsPerPage a 25 para las siguientes páginas
+  itemsPerPage = 25;
+  remainingItems.forEach((item, index) => {
+    // Tu lógica para agregar filas a la página aquí...
     html += `
             <div class="" id="table-data-${index + 1}"
             style="display: grid; grid-template-columns: 40px 551px 130px 223px 96px 130px 110px 1fr; border: 2px solid; box-sizing: border-box; align-content: center; grid-template-rows: 30px; border-left: 0; border-right: 0; border-bottom:0;">
@@ -499,27 +1857,97 @@ app.get("/reporte-de-inspeccion", async (req, res) => {
           </div>
             </div>
           `;
-
-    if (itemCount % itemsPerPage === 0 && itemCount < data.length) {
-      //if((i + 1) % 20 === 0){}
+    const itemCount = index + 1;
+    if (itemCount % itemsPerPage === 0 && itemCount < remainingItems.length) {
       html += `</div></div><div class="page-break"></div> `;
       pageIndex++;
     }
   });
+  for (let i = 0; i < remainingItems.length; i++) {
+    // Tu lógica para agregar filas a la página aquí...
+    
+    const itemCount = i + 1;  // El índice comienza desde 0, por lo que necesitamos agregar 1 para obtener el recuento de elementos
+
+    if (itemCount % itemsPerPage === 0 && itemCount < remainingItems.length) {
+        html += `</div></div><div class="page-break"></div> `;
+        pageIndex++;
+    }
+}
+  // data.map((item, index) => {
+  //   const itemCount = index + 1;
+
+  //   //itemsPerPage = pageIndex === 0 ? pageBreakAfter : pageBreakAfter * 2;
+  //   html += `
+  //           <div class="" id="table-data-${index + 1}"
+  //           style="display: grid; grid-template-columns: 40px 551px 130px 223px 96px 130px 110px 1fr; border: 2px solid; box-sizing: border-box; align-content: center; grid-template-rows: 30px; border-left: 0; border-right: 0; border-bottom:0;">
+  //           <div class="row-item " style="text-align:center;">
+  //             <h3><b>${index + 1}</b></h3>
+  //           </div>
+  //           <div class="row-item " style="padding:0; display:flex; flex-direction:column;">
+  //             <div class="sub-table-container">
+  //               <div class=""
+  //                 style="border-right: 2px solid; height:30px; display:flex; box-sizing:border-box; align-items:center; width:180px; margin:0 auto;"></div>
+  //               <div class=""
+  //                 style="border-right: 2px solid; height:30px; display:flex; box-sizing:border-box; align-items:center; width:100px; margin:0 auto;"></div>
+  //               <div class=""
+  //                 style="height:40px; display:flex; box-sizing:border-box; align-items:center; width:110px; margin:0 auto;"></div>
+  //             </div>
+
+  //           </div>
+  //           <div class="row-item " style=""></div>
+  //           <div class="row-item " style=""></div>
+  //           <div class="row-item " style=""></div>
+  //           <div class="row-item " style=""></div>
+  //           <div class="row-item " style=""></div>
+  //           <div class="row-item " style="padding:0; display:flex; flex-direction:column;">
+
+  //             <table style="width:100%; border-collapse: collapse; height:100%;">
+  //               <thead>
+  //                 <tr>
+  //                   ${item.A > 0 ? `<th class="table-th">${item.A}</th>` : ""}
+  //                   ${item.B > 0 ? `<th class="table-th">${item.B}</th>` : ""}
+  //                   ${item.C > 0 ? `<th class="table-th">${item.C}</th>` : ""}
+  //                   ${item.D > 0 ? `<th class="table-th">${item.D}</th>` : ""}
+  //                   ${item.E > 0 ? `<th class="table-th">${item.E}</th>` : ""}
+  //                   ${item.F > 0 ? `<th class="table-th">${item.F}</th>` : ""}
+  //                   ${item.G > 0 ? `<th class="table-th">${item.G}</th>` : ""}
+  //                   ${item.H > 0 ? `<th class="table-th">${item.H}</th>` : ""}
+  //                   ${item.I > 0 ? `<th class="table-th">${item.I}</th>` : ""}
+  //                 </tr>
+  //               </thead>
+  //             </table>
+
+  //         </div>
+  //           </div>
+  //         `;
+  //         if (itemCount % itemsPerPage === 0 && itemCount < data.length) {
+  //           html += `</div></div><div class="page-break"></div> `;
+  //           pageIndex++;
+
+  //           // Después de la primera página, cambiar itemsPerPage a 25
+  //           if (pageIndex === 2) {
+  //               itemsPerPage = 25;
+  //           }
+  //       }
+  //   // if (itemCount % itemsPerPage === 0 && itemCount < data.length) {
+  //   //   //if((i + 1) % 20 === 0){}
+  //   //   html += `</div></div><div class="page-break"></div> `;
+  //   //   pageIndex++;
+  //   // }
+  // });
   data.map((item, index) => {
     const itemCount = index + 1;
-    
-    
-    if(index === 0){
-      if (data.length > pageBreakAfter) {
-        //if((i + 1) % 20 === 0){}
-        html += `</div></div><div class="page-break"></div> `;
-        //pageIndex++;
-      }
+
+    if (index === 0) {
+      // if (data.length > pageBreakAfter) {
+      //   //if((i + 1) % 20 === 0){}
+      //   html += `</div></div><div class="page-break"></div> `;
+      //   //pageIndex++;
+      // }
       html += `  
-      <div class="${pageIndexPdf > 3 || data.length > 20 ? "container" : ""}" style="${
-        pageIndexPdf > 3 || data.length > 20 ? "border-top:0;" : ""
-      }">
+      <div class="${
+        pageIndexPdf > 3 || data.length > 20 ? "container" : ""
+      }" style="${pageIndexPdf > 3 || data.length > 20 ? "border-top:0;" : ""}">
         <div class="">
           <div
             style="display: grid; grid-template-columns: 591px 130px 223px 96px 130px 110px 1fr; border: 2px solid; box-sizing: border-box; align-content: center; grid-template-rows: auto; border-left: 0; border-right: 0; border-bottom:0;">
@@ -823,16 +2251,129 @@ app.get("/reporte-de-inspeccion", async (req, res) => {
     
     </html>
     `;
+    }
+
+    // html += `
+    //         <div class="" id="table-data-${index + 1}"
+    //         style="display: grid; grid-template-columns: 40px 551px 130px 223px 96px 130px 110px 1fr; border: 2px solid; box-sizing: border-box; align-content: center; grid-template-rows: 30px; border-left: 0; border-right: 0; border-bottom:0;">
+    //         <div class="row-item " style="text-align:center;">
+    //           <h3><b>${index + 1}</b></h3>
+    //         </div>
+    //         <div class="row-item " style="padding:0; display:flex; flex-direction:column;">
+    //           <div class="sub-table-container">
+    //             <div class=""
+    //               style="border-right: 2px solid; height:30px; display:flex; box-sizing:border-box; align-items:center; width:180px; margin:0 auto;"></div>
+    //             <div class=""
+    //               style="border-right: 2px solid; height:30px; display:flex; box-sizing:border-box; align-items:center; width:100px; margin:0 auto;"></div>
+    //             <div class=""
+    //               style="height:40px; display:flex; box-sizing:border-box; align-items:center; width:110px; margin:0 auto;"></div>
+    //           </div>
+
+    //         </div>
+    //         <div class="row-item " style=""></div>
+    //         <div class="row-item " style=""></div>
+    //         <div class="row-item " style=""></div>
+    //         <div class="row-item " style=""></div>
+    //         <div class="row-item " style=""></div>
+    //         <div class="row-item " style="padding:0; display:flex; flex-direction:column;">
+
+    //           <table style="width:100%; border-collapse: collapse; height:100%;">
+    //             <thead>
+    //               <tr>
+    //                 ${item.A > 0 ? `<th class="table-th">${item.A}</th>` : ""}
+    //                 ${item.B > 0 ? `<th class="table-th">${item.B}</th>` : ""}
+    //                 ${item.C > 0 ? `<th class="table-th">${item.C}</th>` : ""}
+    //                 ${item.D > 0 ? `<th class="table-th">${item.D}</th>` : ""}
+    //                 ${item.E > 0 ? `<th class="table-th">${item.E}</th>` : ""}
+    //                 ${item.F > 0 ? `<th class="table-th">${item.F}</th>` : ""}
+    //                 ${item.G > 0 ? `<th class="table-th">${item.G}</th>` : ""}
+    //                 ${item.H > 0 ? `<th class="table-th">${item.H}</th>` : ""}
+    //                 ${item.I > 0 ? `<th class="table-th">${item.I}</th>` : ""}
+    //               </tr>
+    //             </thead>
+    //           </table>
+
+    //       </div>
+    //         </div>
+    //       `;
   });
 
+  const documentHeights = {
+    1: {
+      h: 200,
+    },
+    2: {
+      h: 210,
+    },
+    3: {
+      h: 220,
+    },
+    4: {
+      h: 230,
+    },
+    5: {
+      h: 240,
+    },
+    6: {
+      h: 250,
+    },
+    7: {
+      h: 260,
+    },
+    8: {
+      h: 270,
+    },
+    9: {
+      h: 280,
+    },
+    10: {
+      h: 290,
+    },
+    11: {
+      h: 290,
+    },
+    12: {
+      h: 290,
+    },
+    13: {
+      h: 290,
+    },
+    14: {
+      h: 290,
+    },
+    15: {
+      h: 290,
+    },
+    16: {
+      h: 290,
+    },
+    17: {
+      h: 290,
+    },
+    18: {
+      h: 290,
+    },
+    19: {
+      h: 290,
+    },
+    20: {
+      h: 200,
+    },
+  };
   const defaultHeight = 300;
-  
+
   //console.log(pageIndexPdf)
   await page.setContent(html);
 
   const pdf = await page.pdf({
     width: "500mm",
-    height: `${pageIndexPdf > 2 && data.length >= 20 ? data.length > 20 ? "330":"400":documentHeights[data.length]?.h || defaultHeight}mm`,
+    height: `${
+      pageIndexPdf > 2 && data.length >= 20
+        ? data.length > 20
+          ? "330"
+          : "400"
+        : documentHeights[data.length]?.h || defaultHeight
+    }mm`,
     printBackground: true,
   });
 

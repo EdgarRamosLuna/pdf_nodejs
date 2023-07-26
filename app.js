@@ -2,16 +2,866 @@ const puppeteer = require("puppeteer");
 const express = require("express");
 const app = express();
 const path = require("path");
+const { default: axios } = require("axios");
 
 // app.use('/assets', express.static(path.join(__dirname, 'src/assets/img/')))
 app.use("/assets", express.static(path.join(__dirname, "src/assets/img")));
+app.get("/reporte-inspeccion/:id", async (req, res) => {
+  const id = req.params.id;
+  // Dummy data for illustration purposes
+  // let data = Array.from({length: 68}, (_, i) => i + 1);
+  const response = await axios.get("http://localhost/daryan-server/api/get/");
+  const dbData = response.data?.filter(
+    (item) => Number(item.id) === Number(id)
+  );
 
-app.get("/reporte-de-inspeccion", async (req, res) => {
-  const browser = await puppeteer.launch({ headless: "new" });
+  const {
+    plant,
+    report_number,
+    part_name,
+    worked_h,
+    rate,
+    shift,
+    part_number,
+    date: fecha,
+    made_by,
+    checked_by,
+    supplier,
+    employee,
+    report_cc,
+    reports_st,
+    report_in,
+    report_ob,
+    report_rby,
+    report_totals,
+    authorized_by
+  } = dbData[0];
+  console.log(dbData);
+  console.log(report_ob);
+  console.log(report_in);
 
+  const data = dbData[0]?.reports_cc;
+  let sumA = 0,
+    sumB = 0,
+    sumC = 0,
+    sumD = 0,
+    sumE = 0,
+    sumF = 0,
+    sumG = 0,
+    sumH = 0,
+    sumI = 0;
+
+  data.forEach((item) => {
+    sumA += Number(item.A);
+    sumB += Number(item.B);
+    sumC += Number(item.C);
+    sumD += Number(item.D);
+    sumE += Number(item.E);
+    sumF += Number(item.F);
+    sumG += Number(item.G);
+    sumH += Number(item.H);
+    sumI += Number(item.I);
+  });
+  let itemsPerPage = 20;
+  let firstPageItems = data.slice(0, itemsPerPage);
+  let remainingItems = data.slice(itemsPerPage);
+  let items;
+  if (remainingItems.length <= 20) {
+    itemsPerPage = remainingItems.length;
+    items = firstPageItems;
+  } else {
+    itemsPerPage = 35;
+    items = remainingItems;
+  }
+
+  let html = `
+  <!DOCTYPE html>
+  <html>
+  
+  <head>
+    <style>
+    .firmaTxt{
+      margin-top:-25px;
+    }
+      .page-break {
+        page-break-before: always;
+      }
+      
+      @media print {
+  
+  
+        .page {
+          page-break-after: always;
+        }
+      }
+  
+      * {
+        font-family: Arial, sans-serif;
+      }
+  
+      .two-columns {
+        grid-column: span 2;
+      }
+  
+      .six-columns {
+        grid-column: span 6;
+      }
+  
+      .nine-columns {
+        grid-column: span 9;
+      }
+  
+      .eleven-columns {
+        grid-column: span 11;
+      }
+  
+      .vertical-text {
+        writing-mode: vertical-rl;
+        grid-row: span 5;
+      }
+  
+      .seven-columns {
+        grid-column: span 7;
+      }
+  
+      .incidents-container {
+        width: 100%;
+      }
+  
+      .container {
+        margin: 15px 0px;
+        padding: 0;
+        width: 100%;
+        box-sizing: border-box;
+        border: 2px solid;
+  
+      }
+  
+      .row-item {
+        border-left: 2px solid;
+        box-sizing: border-box;
+        border-right: 0;
+        border: 0;
+        border-right: 2px solid;
+        border-top: 1 px solid;
+        border-bottom: 0;
+        font-size: 11px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        justify-items: center;
+        text-align: center;
+        font-weight: bold;
+      }
+  
+      .row-item:last-child {
+        border-right: 0;
+      }
+  
+      h1 {
+        font-weight: 500;
+      }
+  
+      .title-item {
+        background: #b4c6e7;
+        font-weight: bold;
+        font-size: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        justify-items: center;
+        text-align: center;
+        box-sizing: border-box;
+        padding: 0 5px;
+        width: 100%;
+      }
+  
+      .sub-table-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        align-items: center;
+        justify-content: start;
+        justify-items: center;
+  
+      }
+  
+      .checkbox {
+        width: 30px;
+        height: 20px;
+        border: 1px solid #000;
+        box-sizing: border-box;
+      }
+  
+      .checked {
+        background: #000;
+      }
+  
+      .firma-container {
+        width: 100%;
+        height: 90px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+  
+      .firma {
+        width: 300px;
+        margin: 0 auto;
+        background-color: #000;
+        height: 2px;
+      }
+  
+      .footer {
+        width: 100%;
+      }
+      .thead-th{
+        height:40px; width:10px;border:1px solid; border-bottom:0; border-top:0; border-right:0;
+      }
+      .thead-th:first-child {
+        height:40px; width:10px;border:1px solid; border-bottom:0; border-top:0; border-right:0; border-left:0;
+      }
+      .table-th {
+        max-width: 10px;
+        width: 10px;
+        border: 1px solid;
+        border-bottom: 0;
+        border-top: 0;
+        border-right: 0;
+        box-sizing:border-box;
+      }
+      
+      .table-th:first-child {
+        max-width: 10px;
+        width: 10px;
+        border: 1px solid;
+        border-bottom: 0;
+        border-top: 0;
+        border-right: 0;
+        border-left: 0;
+      }
+    </style>
+  </head>
+  
+  <body>
+    <div class="container" id="divToPrint">
+      <div
+        style="display: grid; grid-template-columns: 1fr 85%; width: 100%; justify-content: center; align-items: center; justify-items: center; grid-template-rows: 80px;">
+        <div style="width: 100%;text-align: center;border-right: 2px solid #000;">
+        <img src="http://localhost:3001/assets/logo.png" alt="Daryan Saltillo" style="width:180px;" />
+
+        </div>
+  
+        <div>
+          <h1>
+            <b>REPORTE DE INSPECCION / INSPECTION REPORT</b>
+          </h1>
+        </div>
+      </div>
+      <div class="">
+        <div style="">
+          <div class=""
+            style="display: grid; grid-template-columns: 141px 380px 250px 379px 130px 260px 180px 1fr; border: 2px solid; box-sizing: border-box; align-content: center; grid-template-rows: 40px; border-left: 0; border-right: 0; border-bottom:0;">
+            <div class="row-item title-item" style="">PLANTA /
+              FACILITY
+            </div>
+            <div class="row-item" style="">${plant}</div>
+            <div class="row-item title-item" style="">
+              PROVEEDOR /
+              SUPPLIER</div>
+            <div class="row-item" style="">${supplier}</div>
+            <div class="row-item title-item" style="">FECHA /
+              DATE</div>
+            <div class="row-item" style="">${fecha}</div>
+            <div class="row-item title-item">No. DE REPORTE /
+              REPORT <br> NUMBER</div>
+            <div class="row-item" style="">${report_number}</div>
+  
+          </div>
+        </div>
+        <div style="">
+          <div class=""
+            style="display: grid; grid-template-columns: 141px 450px 353px 206px 130px 260px 100px 1fr; border: 2px solid; box-sizing: border-box; align-content: center; grid-template-rows: 40px; border-left: 0; border-right: 0; border-bottom:0;">
+            <div class="row-item title-item" style="">NOMBRE DE PARTE / PART
+              DESCRIPTION
+            </div>
+            <div class="row-item" style="">${part_name}</div>
+            <div class="row-item title-item" style="">
+              HORAS TRABAJADAS / HOURS WORKED</div>
+            <div class="row-item" style="">${worked_h}</div>
+            <div class="row-item title-item" style="">RATE</div>
+            <div class="row-item" style="">${rate}</div>
+            <div class="row-item title-item" style="">TURNO /
+              SHIFT</div>
+            <div class="row-item" style="display: flex;
+                justify-content: center;
+                align-items: center">${shift}</div>
+          </div>
+        </div>
+        <div style="">
+          <div class=""
+            style="display: grid; grid-template-columns: 141px 350px 100px 130px 80px 143px 136px 200px 1fr; border: 2px solid; box-sizing: border-box; align-content: center; grid-template-rows: 40px; border-left: 0; border-right: 0; border-bottom:0;">
+            <div class="row-item title-item" style="text-align:center;">
+              TIPO DE SERVICIO / SERVICE
+              TYPE
+            </div>
+            <div class="row-item" style="padding:0; display:flex; flex-direction:column;">
+              SELECCIÓN/VISUAL INSPECCIÓN
+            </div>
+            <div class="row-item" style="">
+              <div class="checkbox ${
+                Number(reports_st?.visual_inspection) > 0 ? "checked" : ""
+              }"></div>
+            </div>
+            <div class="row-item" style="">RETRABAJO / RE-WORK</div>
+            <div class="row-item" style="">
+              <div class="checkbox ${
+                Number(reports_st?.re_wrok) > 0 ? "checked" : ""
+              }"></div>
+            </div>
+            <div class="row-item" style="">OTROS (ESPECIFIQUE)
+              / OTHERS</div>
+            <div class="row-item" style="">
+              <div class=" ">${
+                reports_st?.others !== "" ? reports_st.others : ""
+              }</div>
+            </div>
+            <div class="row-item title-item" style="display: flex;
+                justify-content: center;
+                align-items: center">NUMERO DE PARTE / PART NUMBER</div>
+            <div class="row-item" style="display: flex;
+                justify-content: center;
+                align-items: center">${part_number > 0 ? part_number : ""}</div>
+          </div>
+        </div>
+        <div style="">
+          <div class=""
+            style="display: grid; grid-template-columns: 141px 350px 100px 130px 80px 143px 96px 130px 110px 100px 1fr; border: 2px solid; box-sizing: border-box; align-content: center; grid-template-rows: 50px; border-left: 0; border-right: 0; border-bottom:0;">
+            <div class="row-item title-item" style="text-align:center;">
+              FECHA DE PRODUCCION / PRODUCTION DATE
+            </div>
+            <div class="row-item" style="padding:0; display:flex; flex-direction:column;">
+  
+  
+            </div>
+            <div class="row-item" style="">
+              <div class="checkbox ${
+                Number(report_cc?.production_date) > 0 ? "checked" : ""
+              }"></div>
+            </div>
+            <div class="row-item" style="">FECHA DE APROBADO/
+              APROBAL DATE</div>
+            <div class="row-item" style="">
+              <div class="checkbox ${
+                Number(report_cc?.aprobal_date) > 0 ? "checked" : ""
+              }"></div>
+            </div>
+            <div class="row-item" style="">SERIE / SERIAL
+              NUMBER</div>
+            <div class="row-item">
+              <div class="checkbox ${
+                Number(report_cc?.serial_number) > 0 ? "checked" : ""
+              }"></div>
+            </div>
+            <div class="row-item" style="display: flex;justify-content: center;align-items: center">LOTE / LOT</div>
+            <div class="row-item">
+              <div class="checkbox ${
+                Number(report_cc?.serial_number) > 0 ? "checked" : ""
+              }"></div>
+            </div>
+            <div class="row-item" style="display: flex;justify-content: center;align-items: center">OTROS
+              (ESPECIFIQUE) /
+              OTHERS
+            </div>
+            <div class="row-item" style="display: flex;justify-content: center;align-items: center">${
+              report_cc?.others !== "" ? report_cc.others : ""
+            }</div>
+          </div>
+        </div>
+  
+        <div style="">
+          <div class=""
+            style="display: grid; grid-template-columns: 40px 551px 130px 223px 96px 130px 110px 1fr; border: 2px solid; box-sizing: border-box; align-content: center; grid-template-rows: auto; border-left: 0; border-right: 0; border-bottom:0;">
+            <div class="row-item title-item" style="text-align:center;">
+              <p style="text-align:center; display:flex; align-items:center; justify-content:center;font-weight:bold;">
+                I<br>
+            T<br>
+            E<br>
+            M
+              </p>
+            </div>
+            <div class="row-item title-item" style="padding:0; display:flex; flex-direction:column;">
+              <div class="" style="width:100%;border-bottom: 2px solid; padding:15px 0;">
+                CONTROL DEL CLIENTE / CUSTOMER CONTROL</div>
+              <div class="sub-table-container">
+                <div class=""
+                  style="border-right: 2px solid; height:40px; display:flex; box-sizing:border-box; align-items:center; width:180px; margin:0 auto;">
+                  FECHA DE PRODUCCION /
+                  PRODUCTION DATE</div>
+                <div class=""
+                  style="border-right: 2px solid; height:40px; display:flex; box-sizing:border-box; align-items:center; width:100px; margin:0 auto;">
+                  LOTE / LOT</div>
+                <div class=""
+                  style="height:40px; display:flex; box-sizing:border-box; align-items:center; width:110px; margin:0 auto;">
+                  SERIE / SERIAL</div>
+              </div>
+  
+            </div>
+            <div class="row-item title-item" style="">
+              CANTIDAD
+              INSPECCIONADA / QT.
+              INSPECTED</div>
+            <div class="row-item title-item" style="">PIEZAS NG / NG PIECES </div>
+            <div class="row-item title-item" style="">PIEZAS OK / OK PIECES</div>
+            <div class="row-item title-item" style="">PIEZAS
+              RETRABAJADAS / RE
+              WORK PARTS</div>
+            <div class="row-item title-item" style="">SCRAP</div>
+            <div class="row-item title-item" style="padding:0; display:flex; flex-direction:column;">
+            <div class="" style="width:100%;border-bottom: 2px solid; padding:15px 0;">
+              INCIDENTES / INCIDENTS TO VERIFY</div>
+
+            <table style="width:100%; border-collapse: collapse; height:100%;">
+              <thead>
+                <tr>
+                ${data
+                  .map(
+                    (item, index) => `
+                     ${
+                       index === 0 && item.A > 0
+                         ? `<th class="thead-th table-th" style="border-left:1px solid;">${"A"}</th>`
+                         : ""
+                     }
+                     ${
+                       index === 0 && item.B > 0
+                         ? `<th class="thead-th table-th" style="border-left:2px solid;">${"B"}</th>`
+                         : ""
+                     }
+                     ${
+                       index === 0 && item.C > 0
+                         ? `<th class="thead-th table-th" style="border-left:2px solid;">${"C"}</th>`
+                         : ""
+                     }
+                     ${
+                       index === 0 && item.D > 0
+                         ? `<th class="thead-th table-th" style="border-left:2px solid;">${"D"}</th>`
+                         : ""
+                     }
+                     ${
+                       index === 0 && item.E > 0
+                         ? `<th class="thead-th table-th" style="border-left:2px solid;">${"E"}</th>`
+                         : ""
+                     }
+                     ${
+                       index === 0 && item.F > 0
+                         ? `<th class="thead-th table-th" style="border-left:2px solid;">${"F"}</th>`
+                         : ""
+                     }
+                     ${
+                       index === 0 && item.G > 0
+                         ? `<th class="thead-th table-th" style="border-left:2px solid;">${"G"}</th>`
+                         : ""
+                     }
+                     ${
+                       index === 0 && item.H > 0
+                         ? `<th class="thead-th table-th" style="border-left:2px solid;">${"H"}</th>`
+                         : ""
+                     }
+                     ${
+                       index === 0 && item.I > 0
+                         ? `<th class="thead-th table-th">${"I"}</th>`
+                         : ""
+                     }
+                  `
+                  )
+                  .join("")}
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Aquí se pueden agregar las filas de la tabla -->
+              </tbody>
+            </table>
+
+
+          </div>
+  
+  
+            </div>
+          </div>
+        </div>
+
+        `;
+  let pageIndex = 1;
+
+  // Process the first 20 items for the first page
+  firstPageItems.forEach((item, index) => {
+    html += `
+    <div class="" id="table-data-${index + 1}"
+    style="display: grid; grid-template-columns: 40px 551px 130px 223px 96px 130px 110px 1fr; border: 2px solid; box-sizing: border-box; align-content: center; grid-template-rows: 30px; border-left: 0; border-right: 0; border-bottom:0;">
+    <div class="row-item " style="text-align:center;">
+      <h3><b>${index + 1}</b></h3>
+    </div>
+    <div class="row-item " style="padding:0; display:flex; flex-direction:column;">
+      <div class="sub-table-container">
+        <div class=""
+          style="border-right: 2px solid; height:30px; display:flex; box-sizing:border-box; align-items:center; width:180px; margin:0 auto;"></div>
+        <div class=""
+          style="border-right: 2px solid; height:30px; display:flex; box-sizing:border-box; align-items:center; width:100px; margin:0 auto;"></div>
+        <div class=""
+          style="height:40px; display:flex; box-sizing:border-box; align-items:center; width:110px; margin:0 auto;"></div>
+      </div>
+
+    </div>
+    <div class="row-item " style=""></div>
+    <div class="row-item " style=""></div>
+    <div class="row-item " style=""></div>
+    <div class="row-item " style=""></div>
+    <div class="row-item " style=""></div>
+    <div class="row-item " style="padding:0; display:flex; flex-direction:column;">
+
+      <table style="width:100%; border-collapse: collapse; height:100%;">
+        <thead>
+          <tr>
+            ${item.A > 0 ? `<th class="table-th">${item.A}</th>` : ""}
+            ${
+              item.B > 0
+                ? `<th class="table-th" style="border-left:2px solid;">${item.B}</th>`
+                : ""
+            }
+            ${
+              item.C > 0
+                ? `<th class="table-th" style="border-left:2px solid;">${item.C}</th>`
+                : ""
+            }
+            ${
+              item.D > 0
+                ? `<th class="table-th" style="border-left:2px solid;">${item.D}</th>`
+                : ""
+            }
+            ${
+              item.E > 0
+                ? `<th class="table-th" style="border-left:2px solid;">${item.E}</th>`
+                : ""
+            }
+            ${
+              item.F > 0
+                ? `<th class="table-th" style="border-left:2px solid;">${item.F}</th>`
+                : ""
+            }
+            ${
+              item.G > 0
+                ? `<th class="table-th" style="border-left:2px solid;">${item.G}</th>`
+                : ""
+            }
+            ${
+              item.H > 0
+                ? `<th class="table-th" style="border-left:2px solid;">${item.H}</th>`
+                : ""
+            }
+            ${item.I > 0 ? `<th class="table-th">${item.I}</th>` : ""}
+          </tr>
+        </thead>
+      </table>
+
+
+  </div>
+    </div>
+  `;
+    //   html += `Item: ${item}, Index: ${index}\\n`;
+    const itemCount = index + 1;
+    if (itemCount % itemsPerPage === 0 && itemCount < remainingItems.length) {
+      html += `</div></div><div class="page-break"></div><div class="container" style="border-top:0;"> `;
+    }
+  });
+
+  // Now change itemsPerPage to 25 for the following pages
+
+  if (remainingItems.length <= 20) {
+    itemsPerPage = remainingItems.length;
+  } else {
+    itemsPerPage = 35;
+  }
+
+  for (let i = 0; i < items.length; i++) {
+    let item = items[i]; // Get the current item
+
+    //  let item = remainingItems[i];  // Get the current item
+    if (i === 0) {
+      // Add rows to the page
+      html += `  
+      <div class="" style="">
+        <div class="">
+          <div
+            style="display: grid; grid-template-columns: 591px 130px 223px 96px 130px 110px 1fr; border: 2px solid; box-sizing: border-box; align-content: center; grid-template-rows: auto; border-left: 0; border-right: 0; border-bottom:0;">
+    
+            <div class="row-item title-item" style="padding:0; display:flex; flex-direction:column;">
+              TOTALES / TOTAL
+            </div>
+            <div class="row-item " style="">${
+              Number(report_totals?.cant) > 0 ? report_totals.cant : ""
+            }</div>
+            <div class="row-item " style="">${
+              Number(report_totals?.ng) > 0 ? report_totals.ng : ""
+            }</div>
+            <div class="row-item " style="">${
+              Number(report_totals?.ok) > 0 ? report_totals.ok : ""
+            }</div>
+            <div class="row-item " style="">${
+              Number(report_totals?.rework) > 0 ? report_totals.rework : ""
+            }</div>
+            <div class="row-item " style="">${
+              Number(report_totals?.scrap) > 0 ? report_totals.scrap : ""
+            }</div>
+            <div class="row-item " style="padding:0; display:flex; flex-direction:column;">
+    
+    
+              <table style="width:100%; border-collapse: collapse; height:100%;">
+                <thead>
+                  <tr>
+                    ${
+                      sumA > 0
+                        ? `<th class="thead-th table-th" >${sumA}</th>`
+                        : ""
+                    } 
+                    ${
+                      sumB > 0
+                        ? `<th class="thead-th table-th" style="border-left:2px solid;">${sumB}</th>`
+                        : ""
+                    } 
+                    ${
+                      sumC > 0
+                        ? `<th class="thead-th table-th" style="border-left:2px solid;">${sumC}</th>`
+                        : ""
+                    } 
+                    ${
+                      sumD > 0
+                        ? `<th class="thead-th table-th" style="border-left:2px solid;">${sumD}</th>`
+                        : ""
+                    } 
+                    ${
+                      sumE > 0
+                        ? `<th class="thead-th table-th" style="border-left:2px solid;">${sumE}</th>`
+                        : ""
+                    } 
+                    ${
+                      sumF > 0
+                        ? `<th class="thead-th table-th" style="border-left:2px solid;">${sumF}</th>`
+                        : ""
+                    } 
+                    ${
+                      sumG > 0
+                        ? `<th class="thead-th table-th" style="border-left:2px solid;">${sumG}</th>`
+                        : ""
+                    } 
+                    ${
+                      sumH > 0
+                        ? `<th class="thead-th table-th" style="border-left:2px solid;">${sumH}</th>`
+                        : ""
+                    } 
+                    ${
+                      sumI > 0
+                        ? `<th class="thead-th table-th">${sumI}</th>`
+                        : ""
+                    } 
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Aquí se pueden agregar las filas de la tabla -->
+                </tbody>
+              </table>
+    
+    
+            </div>
+          </div>
+        </div>
+        <div style="">
+          <div class=""
+            style="display: grid; grid-template-columns: 591px 689px 1fr; border: 2px solid;  align-content: center; grid-template-rows: auto; border-left: 0px; border-right: 0; border-bottom:0;">
+    
+            <div class="row-item" style="padding:0; display:flex; flex-direction:column;">
+              <div class=" title-item" style="width:100%;border-bottom: 2px solid; padding:15px 0; box-sizing: unset;  border-right: 2px solid;">
+                REALIZO / INSPECTED BY</div>                  
+                ${report_rby.map(
+                  report => `<div class="" style="display:grid; grid-template-columns: 1fr; grid-template-rows:30px; width:100% ">
+                  <div class=""
+                 style="  height:100%; display:flex; align-items:center; justify-content:center; border-bottom:2px solid">${report.realized_by}</div></div>`
+                ).join('')}                        
+            </div>
+            <div class="row-item" style="padding:0; display:flex; flex-direction:column;">
+              <div class=" title-item" style="width:100%;border-bottom: 2px solid;  padding:15px 0; border-right: 1px solid;">
+                OBSERVACIONES / COMMENTS</div>
+                ${report_ob.map(
+                  report => `<div class="" style="display:grid; grid-template-columns: 1fr; grid-template-rows:30px; width:100%; border-right: 1px solid;">
+                  <div class=""
+                 style="  height:100%; display:flex; align-items:center; justify-content:center; border-bottom:2px solid">${report.observations}</div></div>`
+                ).join('')}
+               
+    
+            </div>
+            <div class="row-item" style="padding: 0;flex-direction: column;width: 100%;display: flex;overflow: hidden;">
+              <div class="title-item" style="width:100%;border-bottom: 2px solid; padding:15px 0; border-left: 1px solid;">
+                INCIDENTES / INCIDENTS TO VERIFY
+              </div>
+              <div class="incidents-container">
+              ${report_in.map(
+                report => `<div class="" style="display:grid; grid-template-columns: 1fr; grid-template-rows:30px; width:100% ">
+                <div class=""
+               style="  height:100%; display:flex; align-items:center; justify-content:center; border-bottom:2px solid">${report.incident}</div></div>`
+              ).join('')}         
+              </div>
+    
+            </div>
+          </div>
+          <div class="footer">
+            <div style="">
+              <div class=""
+                style="display: grid; grid-template-columns: 591px 689px 1fr; border: 2px solid; box-sizing: border-box; align-content: center; grid-template-rows: auto; border-left: 0; border-right: 0; border-bottom:0;">
+    
+                <div class="row-item" style="padding:0; display:flex; flex-direction:column;">
+                  <div class=" title-item" style="width:100%;border-bottom: 2px solid; padding:15px 0;">
+                    ELABORO</div>
+                  <div class="firma-container">
+                  
+                    <div class="firma">
+                      <div class="firmaTxt" style="margin-top:-25px;">
+                      ${made_by}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row-item" style="padding:0; display:flex; flex-direction:column;">
+                  <div class=" title-item" style="width:100%;border-bottom: 2px solid; padding:15px 0;">
+                  REVISO</div>
+                  <div class="firma-container">
+                    <div class="firma">
+                      <div class="firmaTxt">
+                      ${checked_by}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row-item" style="padding:0; display:flex; flex-direction:column;">
+                  <div class=" title-item" style="width:100%;border-bottom: 2px solid; padding:15px 0;">
+                  AUTORIZO</div>
+                  <div class="firma-container">
+                    <div class="firma">
+                      <div class="firmaTxt">
+                        ${authorized_by}
+                        </div>
+                    </div>
+                  </div>
+                </div>
+    
+    
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    </body>
+    
+    </html>
+    `;
+      if ((i + 1) % itemsPerPage === 0 && i < items.length - 1) {
+        html += `</div></div><div class="page-break"></div><div class="container" style="border-top:0;">`;
+      }
+      // if ((i + 1) % itemsPerPage === 0 && i < remainingItems.length - 1) {
+      //   html += `</div></div><div class="page-break"></div><div class="container" style="border-top:0;">`;
+      // }
+    }
+  }
+  html += `</div></div>`;
+
+  // Finally, add the page closure
+
+  const browser = await puppeteer.launch();
   const page = await browser.newPage();
-  await page.emulateMediaType("screen");
-  await page.setViewport({ width: 1920, height: 1080 });
+  await page.setContent(html);
+
+  // Define the page height based on the number of items
+  // function calculatePageHeight(numItems) {
+  //   const minHeight = 200;  // Minimum height for 0 items
+  //   const extraHeightTop = 70;  // Extra height for the 7 rows at the top
+  //   const extraHeightBottom = 130;  // Extra height for the 13 rows at the bottom
+  //   const maxHeight = 400;  // Maximum height for maxItems items
+  //   const maxItems = 35;  // The number of items at which the page reaches its maximum height
+
+  //   // Calculate the height per item
+  //   const heightPerItem = (maxHeight - minHeight - extraHeightTop - extraHeightBottom) / maxItems;
+
+  //   // Calculate the actual height based on the number of items
+  //   let actualHeight = minHeight + extraHeightTop + numItems * heightPerItem + extraHeightBottom;
+
+  //   // Don't let the height exceed the maximum
+  //   if (actualHeight > maxHeight) {
+  //     actualHeight = maxHeight;
+  //   }
+
+  //   // Convert the height to a string with "mm"
+  //   return `${actualHeight}mm`;
+  // }
+  function calculatePageHeight(numItems) {
+    const minHeight = 200; // Minimum height for 0 items
+    const extraHeightTop = 70; // Extra height for the 7 rows at the top
+    const extraHeightBottom = 130; // Extra height for the 13 rows at the bottom
+    const maxHeight = 400; // Maximum height for maxItems items
+    const maxItems = 35; // The number of items at which the page reaches its maximum height
+
+    // Calculate the height per item
+    const heightPerItem =
+      (maxHeight - minHeight - extraHeightTop - extraHeightBottom) / maxItems;
+
+    // Calculate the actual height based on the number of items
+    let actualHeight =
+      minHeight + extraHeightTop + numItems * heightPerItem + extraHeightBottom;
+
+    // Don't let the height exceed the maximum
+    if (actualHeight > maxHeight) {
+      actualHeight = maxHeight;
+    }
+
+    // Convert the height to a string with "mm"
+    return `${actualHeight}mm`;
+  }
+
+  let pageHeight = calculatePageHeight(data.length);
+
+  const pdf = await page.pdf({
+    width: "500mm",
+    height: pageHeight,
+    printBackground: true,
+  });
+
+  // if (data.length <= 20) {
+  //   pageHeight = `${data.length * 23.66}mm`;  // Adjust the multiplier as needed
+  // } else {
+  //   pageHeight = '313mm';
+  // }
+
+  // const pdf = await page.pdf({
+  //   width: "500mm",
+  //   height: pageHeight,
+  //   printBackground: true,
+  // });
+
+  await browser.close();
+
+  // Obtiene la fecha actual y la formatea como un string
+  const date = new Date();
+  const dateString = date.toISOString().slice(0, 10); // Formato "yyyy-mm-dd"
+
+  // Establece el nombre del archivo en la cabecera "Content-Disposition"
+  res.setHeader("Content-Disposition", `inline; filename=${dateString}.pdf`);
+  //res.setHeader('Content-Disposition', `attachment; filename=${dateString}.pdf`);
+
+  // Envía el PDF como una respuesta
+  res.type("application/pdf");
+  res.send(pdf);
+});
+app.get("/reportes-inspeccion", async (req, res) => {
+  // Dummy data for illustration purposes
+  // let data = Array.from({length: 68}, (_, i) => i + 1);
   const data = [
     {
       Item: "Item 1",
@@ -33,6 +883,2914 @@ app.get("/reporte-de-inspeccion", async (req, res) => {
       H: 1,
       I: 1,
     },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+    {
+      Item: "Item 1",
+      "production date": "2023-07-01",
+      lot: "100",
+      serial: "A1B2C3",
+      "QT inspected": 50,
+      "NG Pieces": 5,
+      "OK Pieces": 45,
+      REwork: 0,
+      SCRAP: 0,
+      A: 1,
+      B: 1,
+      C: 1,
+      D: 1,
+      E: 1,
+      F: 1,
+      G: 1,
+      H: 1,
+      I: 1,
+    },
+  ];
+  let sumA = 0,
+    sumB = 0,
+    sumC = 0,
+    sumD = 0,
+    sumE = 0,
+    sumF = 0,
+    sumG = 0,
+    sumH = 0,
+    sumI = 0;
+
+  data.forEach((item) => {
+    sumA += item.A;
+    sumB += item.B;
+    sumC += item.C;
+    sumD += item.D;
+    sumE += item.E;
+    sumF += item.F;
+    sumG += item.G;
+    sumH += item.H;
+    sumI += item.I;
+  });
+  let itemsPerPage = 25;
+  let firstPageItems = data.slice(0, itemsPerPage);
+  let remainingItems = data.slice(itemsPerPage);
+  let html = `
+  <!DOCTYPE html>
+  <html>
+  
+  <head>
+    <style>
+      .page-break {
+        page-break-before: always;
+      }
+  
+      @media print {
+  
+  
+        .page {
+          page-break-after: always;
+        }
+      }
+  
+      * {
+        font-family: Arial, sans-serif;
+      }
+  
+      .two-columns {
+        grid-column: span 2;
+      }
+  
+      .six-columns {
+        grid-column: span 6;
+      }
+  
+      .nine-columns {
+        grid-column: span 9;
+      }
+  
+      .eleven-columns {
+        grid-column: span 11;
+      }
+  
+      .vertical-text {
+        writing-mode: vertical-rl;
+        grid-row: span 5;
+      }
+  
+      .seven-columns {
+        grid-column: span 7;
+      }
+  
+      .incidents-container {
+        width: 100%;
+      }
+  
+      .container {
+        margin: 15px 0px;
+        padding: 0;
+        width: 100%;
+        box-sizing: border-box;
+        border: 2px solid;
+  
+      }
+  
+      .row-item {
+        border-left: 2px solid;
+        box-sizing: border-box;
+        border-right: 0;
+        border: 0;
+        border-right: 2px solid;
+        border-top: 1 px solid;
+        border-bottom: 0;
+        font-size: 11px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        justify-items: center;
+        text-align: center;
+        font-weight: bold;
+      }
+  
+      .row-item:last-child {
+        border-right: 0;
+      }
+  
+      h1 {
+        font-weight: 500;
+      }
+  
+      .title-item {
+        background: #b4c6e7;
+        font-weight: bold;
+        font-size: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        justify-items: center;
+        text-align: center;
+        box-sizing: border-box;
+        padding: 0 5px;
+        width: 100%;
+      }
+  
+      .sub-table-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        align-items: center;
+        justify-content: start;
+        justify-items: center;
+  
+      }
+  
+      .checkbox {
+        width: 30px;
+        height: 20px;
+        border: 1px solid #000;
+        box-sizing: border-box;
+      }
+  
+      .checked {
+        background: #000;
+      }
+  
+      .firma-container {
+        width: 100%;
+        height: 90px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+  
+      .firma {
+        width: 300px;
+        margin: 0 auto;
+        background-color: #000;
+        height: 2px;
+      }
+     
+  
+      .footer {
+        width: 100%;
+      }
+      .thead-th{
+        height:40px; width:10px;border:1px solid; border-bottom:0; border-top:0; border-right:0;
+      }
+      .thead-th:first-child {
+        height:40px; width:10px;border:1px solid; border-bottom:0; border-top:0; border-right:0; border-left:0;
+      }
+      .table-th {
+        max-width: 10px;
+        width: 10px;
+        border: 1px solid;
+        border-bottom: 0;
+        border-top: 0;
+        border-right: 0;
+        box-sizing:border-box;
+      }
+      
+      .table-th:first-child {
+        max-width: 10px;
+        width: 10px;
+        border: 1px solid;
+        border-bottom: 0;
+        border-top: 0;
+        border-right: 0;
+        border-left: 0;
+      }
+    </style>
+  </head>
+  
+  <body>
+    <div class="container" id="divToPrint">
+      <div
+        style="display: grid; grid-template-columns: 1fr 85%; width: 100%; justify-content: center; align-items: center; justify-items: center; grid-template-rows: 80px;">
+        <div style="width: 100%;text-align: center;border-right: 2px solid #000;">
+        <img src="http://localhost:3001/assets/logo.png" alt="Daryan Saltillo" style="width:180px;" />
+
+        </div>
+  
+        <div>
+          <h1>
+            <b>REPORTE DE INSPECCION / INSPECTION REPORT</b>
+          </h1>
+        </div>
+      </div>
+      <div class="">
+        <div style="">
+          <div class=""
+            style="display: grid; grid-template-columns: 141px 380px 250px 379px 130px 260px 180px 1fr; border: 2px solid; box-sizing: border-box; align-content: center; grid-template-rows: 40px; border-left: 0; border-right: 0; border-bottom:0;">
+            <div class="row-item title-item" style="">PLANTA /
+              FACILITY
+            </div>
+            <div class="row-item" style=""></div>
+            <div class="row-item title-item" style="">
+              PROVEEDOR /
+              SUPPLIER</div>
+            <div class="row-item" style=""></div>
+            <div class="row-item title-item" style="">FECHA /
+              DATE</div>
+            <div class="row-item" style=""></div>
+            <div class="row-item title-item">No. DE REPORTE /
+              REPORT <br> NUMBER</div>
+            <div class="row-item" style=""></div>
+  
+          </div>
+        </div>
+        <div style="">
+          <div class=""
+            style="display: grid; grid-template-columns: 141px 450px 353px 206px 130px 260px 100px 1fr; border: 2px solid; box-sizing: border-box; align-content: center; grid-template-rows: 40px; border-left: 0; border-right: 0; border-bottom:0;">
+            <div class="row-item title-item" style="">NOMBRE DE PARTE / PART
+              DESCRIPTION
+            </div>
+            <div class="row-item" style=""></div>
+            <div class="row-item title-item" style="">
+              HORAS TRABAJADAS / HOURS WORKED</div>
+            <div class="row-item" style=""></div>
+            <div class="row-item title-item" style="">RATE</div>
+            <div class="row-item" style=""></div>
+            <div class="row-item title-item" style="">TURNO /
+              SHIFT</div>
+            <div class="row-item" style="display: flex;
+                justify-content: center;
+                align-items: center">3</div>
+          </div>
+        </div>
+        <div style="">
+          <div class=""
+            style="display: grid; grid-template-columns: 141px 350px 100px 130px 80px 143px 96px 240px 1fr; border: 2px solid; box-sizing: border-box; align-content: center; grid-template-rows: 40px; border-left: 0; border-right: 0; border-bottom:0;">
+            <div class="row-item title-item" style="text-align:center;">
+              TIPO DE SERVICIO / SERVICE
+              TYPE
+            </div>
+            <div class="row-item" style="padding:0; display:flex; flex-direction:column;">
+              SELECCIÓN/VISUAL INSPECCIÓN
+            </div>
+            <div class="row-item" style="">
+              <div class="checkbox checked"></div>
+            </div>
+            <div class="row-item" style="">RETRABAJO / RE-WORK</div>
+            <div class="row-item" style="">
+              <div class="checkbox "></div>
+            </div>
+            <div class="row-item" style="">OTROS (ESPECIFIQUE)
+              / OTHERS</div>
+            <div class="row-item" style="">
+              <div class="checkbox "></div>
+            </div>
+            <div class="row-item title-item" style="display: flex;
+                justify-content: center;
+                align-items: center">NUMERO DE PARTE / PART NUMBER</div>
+            <div class="row-item" style="display: flex;
+                justify-content: center;
+                align-items: center"></div>
+          </div>
+        </div>
+        <div style="">
+          <div class=""
+            style="display: grid; grid-template-columns: 141px 350px 100px 130px 80px 143px 96px 130px 110px 100px 1fr; border: 2px solid; box-sizing: border-box; align-content: center; grid-template-rows: 50px; border-left: 0; border-right: 0; border-bottom:0;">
+            <div class="row-item title-item" style="text-align:center;">
+              FECHA DE PRODUCCION / PRODUCTION DATE
+            </div>
+            <div class="row-item" style="padding:0; display:flex; flex-direction:column;">
+  
+  
+            </div>
+            <div class="row-item" style="">
+              <div class="checkbox checked"></div>
+            </div>
+            <div class="row-item" style="">FECHA DE APROBADO/
+              APROBAL DATE</div>
+            <div class="row-item" style="">
+              <div class="checkbox "></div>
+            </div>
+            <div class="row-item" style="">SERIE / SERIAL
+              NUMBER</div>
+            <div class="row-item">
+              <div class="checkbox "></div>
+            </div>
+            <div class="row-item" style="display: flex;justify-content: center;align-items: center">LOTE / LOT</div>
+            <div class="row-item">
+              <div class="checkbox "></div>
+            </div>
+            <div class="row-item" style="display: flex;justify-content: center;align-items: center">OTROS
+              (ESPECIFIQUE) /
+              OTHERS
+            </div>
+            <div class="row-item" style="display: flex;justify-content: center;align-items: center"></div>
+          </div>
+        </div>
+  
+        <div style="">
+          <div class=""
+            style="display: grid; grid-template-columns: 40px 551px 130px 223px 96px 130px 110px 1fr; border: 2px solid; box-sizing: border-box; align-content: center; grid-template-rows: auto; border-left: 0; border-right: 0; border-bottom:0;">
+            <div class="row-item title-item" style="text-align:center;">
+              <p style="text-align:center; display:flex; align-items:center; justify-content:center;font-weight:bold;">
+                I<br>
+            T<br>
+            E<br>
+            M
+              </p>
+            </div>
+            <div class="row-item title-item" style="padding:0; display:flex; flex-direction:column;">
+              <div class="" style="width:100%;border-bottom: 2px solid; padding:15px 0;">
+                CONTROL DEL CLIENTE / CUSTOMER CONTROL</div>
+              <div class="sub-table-container">
+                <div class=""
+                  style="border-right: 2px solid; height:40px; display:flex; box-sizing:border-box; align-items:center; width:180px; margin:0 auto;">
+                  FECHA DE PRODUCCION /
+                  PRODUCTION DATE</div>
+                <div class=""
+                  style="border-right: 2px solid; height:40px; display:flex; box-sizing:border-box; align-items:center; width:100px; margin:0 auto;">
+                  LOTE / LOT</div>
+                <div class=""
+                  style="height:40px; display:flex; box-sizing:border-box; align-items:center; width:110px; margin:0 auto;">
+                  SERIE / SERIAL</div>
+              </div>
+  
+            </div>
+            <div class="row-item title-item" style="">
+              CANTIDAD
+              INSPECCIONADA / QT.
+              INSPECTED</div>
+            <div class="row-item title-item" style="">PIEZAS NG / NG PIECES </div>
+            <div class="row-item title-item" style="">PIEZAS OK / OK PIECES</div>
+            <div class="row-item title-item" style="">PIEZAS
+              RETRABAJADAS / RE
+              WORK PARTS</div>
+            <div class="row-item title-item" style="">SCRAP</div>
+            <div class="row-item title-item" style="padding:0; display:flex; flex-direction:column;">
+            <div class="" style="width:100%;border-bottom: 2px solid; padding:15px 0;">
+              INCIDENTES / INCIDENTS TO VERIFY</div>
+
+            <table style="width:100%; border-collapse: collapse; height:100%;">
+              <thead>
+                <tr>
+                ${data
+                  .map(
+                    (item, index) => `
+                     ${
+                       index === 0 && item.A > 0
+                         ? `<th class="thead-th">${"A"}</th>`
+                         : ""
+                     }
+                     ${
+                       index === 0 && item.B > 0
+                         ? `<th class="thead-th">${"B"}</th>`
+                         : ""
+                     }
+                     ${
+                       index === 0 && item.C > 0
+                         ? `<th class="thead-th">${"C"}</th>`
+                         : ""
+                     }
+                     ${
+                       index === 0 && item.D > 0
+                         ? `<th class="thead-th">${"D"}</th>`
+                         : ""
+                     }
+                     ${
+                       index === 0 && item.E > 0
+                         ? `<th class="thead-th">${"E"}</th>`
+                         : ""
+                     }
+                     ${
+                       index === 0 && item.F > 0
+                         ? `<th class="thead-th">${"F"}</th>`
+                         : ""
+                     }
+                     ${
+                       index === 0 && item.G > 0
+                         ? `<th class="thead-th">${"G"}</th>`
+                         : ""
+                     }
+                     ${
+                       index === 0 && item.H > 0
+                         ? `<th class="thead-th">${"H"}</th>`
+                         : ""
+                     }
+                     ${
+                       index === 0 && item.I > 0
+                         ? `<th class="thead-th">${"I"}</th>`
+                         : ""
+                     }
+                  `
+                  )
+                  .join("")}
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Aquí se pueden agregar las filas de la tabla -->
+              </tbody>
+            </table>
+
+
+          </div>
+  
+  
+            </div>
+          </div>
+        </div>
+
+        `;
+  let pageIndex = 1;
+
+  // Process the first 20 items for the first page
+  firstPageItems.forEach((item, index) => {
+    html += `
+    <div class="" id="table-data-${index + 1}"
+    style="display: grid; grid-template-columns: 40px 551px 130px 223px 96px 130px 110px 1fr; border: 2px solid; box-sizing: border-box; align-content: center; grid-template-rows: 30px; border-left: 0; border-right: 0; border-bottom:0;">
+    <div class="row-item " style="text-align:center;">
+      <h3><b>${index + 1}</b></h3>
+    </div>
+    <div class="row-item " style="padding:0; display:flex; flex-direction:column;">
+      <div class="sub-table-container">
+        <div class=""
+          style="border-right: 2px solid; height:30px; display:flex; box-sizing:border-box; align-items:center; width:180px; margin:0 auto;"></div>
+        <div class=""
+          style="border-right: 2px solid; height:30px; display:flex; box-sizing:border-box; align-items:center; width:100px; margin:0 auto;"></div>
+        <div class=""
+          style="height:40px; display:flex; box-sizing:border-box; align-items:center; width:110px; margin:0 auto;"></div>
+      </div>
+
+    </div>
+    <div class="row-item " style=""></div>
+    <div class="row-item " style=""></div>
+    <div class="row-item " style=""></div>
+    <div class="row-item " style=""></div>
+    <div class="row-item " style=""></div>
+    <div class="row-item " style="padding:0; display:flex; flex-direction:column;">
+
+      <table style="width:100%; border-collapse: collapse; height:100%;">
+        <thead>
+          <tr>
+            ${item.A > 0 ? `<th class="table-th">${item.A}</th>` : ""}
+            ${item.B > 0 ? `<th class="table-th">${item.B}</th>` : ""}
+            ${item.C > 0 ? `<th class="table-th">${item.C}</th>` : ""}
+            ${item.D > 0 ? `<th class="table-th">${item.D}</th>` : ""}
+            ${item.E > 0 ? `<th class="table-th">${item.E}</th>` : ""}
+            ${item.F > 0 ? `<th class="table-th">${item.F}</th>` : ""}
+            ${item.G > 0 ? `<th class="table-th">${item.G}</th>` : ""}
+            ${item.H > 0 ? `<th class="table-th">${item.H}</th>` : ""}
+            ${item.I > 0 ? `<th class="table-th">${item.I}</th>` : ""}
+          </tr>
+        </thead>
+      </table>
+
+
+  </div>
+    </div>
+  `;
+    //   html += `Item: ${item}, Index: ${index}\\n`;
+    const itemCount = index + 1;
+    if (itemCount % itemsPerPage === 0 && itemCount < remainingItems.length) {
+      html += `</div></div><div class="page-break"></div><div class="container" style="border-top:0;"> `;
+    }
+  });
+
+  // Now change itemsPerPage to 25 for the following pages
+  itemsPerPage = 35;
+
+  // Process the remaining items
+  for (let i = 0; i < remainingItems.length; i++) {
+    let item = remainingItems[i]; // Get the current item
+
+    // Add rows to the page
+    html += `
+    <div class="" id="table-data-${i + 1}"
+    style="display: grid; grid-template-columns: 40px 551px 130px 223px 96px 130px 110px 1fr; border: 2px solid; box-sizing: border-box; align-content: center; grid-template-rows: 30px; border-left: 0; border-right: 0; border-bottom:0;">
+    <div class="row-item " style="text-align:center;">
+      <h3><b>${i + 25 + 1}</b></h3>
+    </div>
+    <div class="row-item " style="padding:0; display:flex; flex-direction:column;">
+      <div class="sub-table-container">
+        <div class=""
+          style="border-right: 2px solid; height:30px; display:flex; box-sizing:border-box; align-items:center; width:180px; margin:0 auto;"></div>
+        <div class=""
+          style="border-right: 2px solid; height:30px; display:flex; box-sizing:border-box; align-items:center; width:100px; margin:0 auto;"></div>
+        <div class=""
+          style="height:40px; display:flex; box-sizing:border-box; align-items:center; width:110px; margin:0 auto;"></div>
+      </div>
+    </div>
+    <div class="row-item " style=""></div>
+    <div class="row-item " style=""></div>
+    <div class="row-item " style=""></div>
+    <div class="row-item " style=""></div>
+    <div class="row-item " style=""></div>
+    <div class="row-item " style="padding:0; display:flex; flex-direction:column;">
+      <table style="width:100%; border-collapse: collapse; height:100%;">
+        <thead>
+          <tr>
+            ${item.A > 0 ? `<th class="table-th">${item.A}</th>` : ""}
+            ${item.B > 0 ? `<th class="table-th">${item.B}</th>` : ""}
+            ${item.C > 0 ? `<th class="table-th">${item.C}</th>` : ""}
+            ${item.D > 0 ? `<th class="table-th">${item.D}</th>` : ""}
+            ${item.E > 0 ? `<th class="table-th">${item.E}</th>` : ""}
+            ${item.F > 0 ? `<th class="table-th">${item.F}</th>` : ""}
+            ${item.G > 0 ? `<th class="table-th">${item.G}</th>` : ""}
+            ${item.H > 0 ? `<th class="table-th">${item.H}</th>` : ""}
+            ${item.I > 0 ? `<th class="table-th">${item.I}</th>` : ""}
+          </tr>
+        </thead>
+      </table>
+    </div>
+    </div>
+  `;
+
+    const itemCount2 = i + 1; // Index starts from 0, so we need to add 1 to get item count
+
+    if (itemCount2 % itemsPerPage === 0 && itemCount2 < remainingItems.length) {
+      html += `</div></div><div class="page-break"></div><div class="container" style="border-top:0;"> `;
+      pageIndex++;
+    }
+  }
+
+  for (let i = 0; i < remainingItems.length; i++) {
+    let item = remainingItems[i]; // Get the current item
+    if (i === 0) {
+      // Add rows to the page
+      html += `  
+      <div class="" style="">
+        <div class="">
+          <div
+            style="display: grid; grid-template-columns: 591px 130px 223px 96px 130px 110px 1fr; border: 2px solid; box-sizing: border-box; align-content: center; grid-template-rows: auto; border-left: 0; border-right: 0; border-bottom:0;">
+    
+            <div class="row-item title-item" style="padding:0; display:flex; flex-direction:column;">
+              TOTALES / TOTAL
+            </div>
+            <div class="row-item " style=""> </div>
+            <div class="row-item " style=""></div>
+            <div class="row-item " style=""></div>
+            <div class="row-item " style=""></div>
+            <div class="row-item " style=""></div>
+            <div class="row-item " style="padding:0; display:flex; flex-direction:column;">
+    
+    
+              <table style="width:100%; border-collapse: collapse; height:100%;">
+                <thead>
+                  <tr>
+                    ${
+                      sumA > 0
+                        ? `<th class="thead-th table-th">${sumA}</th>`
+                        : ""
+                    } 
+                    ${
+                      sumB > 0
+                        ? `<th class="thead-th table-th">${sumB}</th>`
+                        : ""
+                    } 
+                    ${
+                      sumC > 0
+                        ? `<th class="thead-th table-th">${sumC}</th>`
+                        : ""
+                    } 
+                    ${
+                      sumD > 0
+                        ? `<th class="thead-th table-th">${sumD}</th>`
+                        : ""
+                    } 
+                    ${
+                      sumE > 0
+                        ? `<th class="thead-th table-th">${sumE}</th>`
+                        : ""
+                    } 
+                    ${
+                      sumF > 0
+                        ? `<th class="thead-th table-th">${sumF}</th>`
+                        : ""
+                    } 
+                    ${
+                      sumG > 0
+                        ? `<th class="thead-th table-th">${sumG}</th>`
+                        : ""
+                    } 
+                    ${
+                      sumH > 0
+                        ? `<th class="thead-th table-th">${sumH}</th>`
+                        : ""
+                    } 
+                    ${
+                      sumI > 0
+                        ? `<th class="thead-th table-th">${sumI}</th>`
+                        : ""
+                    } 
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Aquí se pueden agregar las filas de la tabla -->
+                </tbody>
+              </table>
+    
+    
+            </div>
+          </div>
+        </div>
+        <div style="">
+          <div class=""
+            style="display: grid; grid-template-columns: 591px 579px 1fr; border: 2px solid; box-sizing: border-box; align-content: center; grid-template-rows: auto; border-left: 0; border-right: 0; border-bottom:0;">
+    
+            <div class="row-item" style="padding:0; display:flex; flex-direction:column;">
+              <div class=" title-item" style="width:100%;border-bottom: 2px solid; padding:15px 0;">
+                REALIZO / INSPECTED BY</div>
+              
+                ${
+                  sumA > 0
+                    ? `<div class="" style="display:grid; grid-template-columns: 1fr; grid-template-rows:30px; width:100% ">
+                <div class=""
+                  style="  height:100%; display:flex; align-items:center; justify-content:center; border-bottom:2px solid">${"A"}</div></div>`
+                    : ""
+                } 
+                ${
+                  sumB > 0
+                    ? `<div class="" style="display:grid; grid-template-columns: 1fr; grid-template-rows:30px; width:100% "><div class=""
+                  style="  height:100%; display:flex; align-items:center; justify-content:center; border-bottom:2px solid">${"B"}</div></div>`
+                    : ""
+                } 
+                ${
+                  sumC > 0
+                    ? `<div class="" style="display:grid; grid-template-columns: 1fr; grid-template-rows:30px; width:100% "><div class=""
+                  style="  height:100%; display:flex; align-items:center; justify-content:center; border-bottom:2px solid">${"C"}</div></div>`
+                    : ""
+                } 
+                ${
+                  sumD > 0
+                    ? `<div class="" style="display:grid; grid-template-columns: 1fr; grid-template-rows:30px; width:100% "><div class=""
+                  style="  height:100%; display:flex; align-items:center; justify-content:center; border-bottom:2px solid">${"D"}</div></div>`
+                    : ""
+                } 
+                ${
+                  sumE > 0
+                    ? `<div class="" style="display:grid; grid-template-columns: 1fr; grid-template-rows:30px; width:100% "><div class=""
+                  style="  height:100%; display:flex; align-items:center; justify-content:center; border-bottom:2px solid">${"E"}</div></div>`
+                    : ""
+                } 
+                ${
+                  sumF > 0
+                    ? `<div class="" style="display:grid; grid-template-columns: 1fr; grid-template-rows:30px; width:100% "><div class=""
+                  style="  height:100%; display:flex; align-items:center; justify-content:center; border-bottom:2px solid">${"F"}</div></div>`
+                    : ""
+                } 
+                ${
+                  sumG > 0
+                    ? `<div class="" style="display:grid; grid-template-columns: 1fr; grid-template-rows:30px; width:100% "><div class=""
+                  style="  height:100%; display:flex; align-items:center; justify-content:center; border-bottom:2px solid">${"G"}</div></div>`
+                    : ""
+                } 
+                ${
+                  sumH > 0
+                    ? `<div class="" style="display:grid; grid-template-columns: 1fr; grid-template-rows:30px; width:100% "><div class=""
+                  style="  height:100%; display:flex; align-items:center; justify-content:center; border-bottom:2px solid">${"H"}</div></div>`
+                    : ""
+                } 
+                ${
+                  sumI > 0
+                    ? `<div class="" style="display:grid; grid-template-columns: 1fr; grid-template-rows:30px; width:100% "><div class=""
+                  style="  height:100%; display:flex; align-items:center; justify-content:center; border-bottom:2px solid">${"I"}</div></div>`
+                    : ""
+                } 
+           
+    
+            </div>
+            <div class="row-item" style="padding:0; display:flex; flex-direction:column;">
+              <div class=" title-item" style="width:100%;border-bottom: 2px solid; padding:15px 0;">
+                OBSERVACIONES / COMMENTS</div>
+    
+                ${
+                  sumA > 0
+                    ? `<div class="" style="display:grid; grid-template-columns: 1fr; grid-template-rows:30px; width:100% ">
+                <div class=""
+                  style="  height:100%; display:flex; align-items:center; justify-content:center; border-bottom:2px solid">${"A"}</div></div>`
+                    : ""
+                } 
+                ${
+                  sumB > 0
+                    ? `<div class="" style="display:grid; grid-template-columns: 1fr; grid-template-rows:30px; width:100% "><div class=""
+                  style="  height:100%; display:flex; align-items:center; justify-content:center; border-bottom:2px solid">${"B"}</div></div>`
+                    : ""
+                } 
+                ${
+                  sumC > 0
+                    ? `<div class="" style="display:grid; grid-template-columns: 1fr; grid-template-rows:30px; width:100% "><div class=""
+                  style="  height:100%; display:flex; align-items:center; justify-content:center; border-bottom:2px solid">${"C"}</div></div>`
+                    : ""
+                } 
+                ${
+                  sumD > 0
+                    ? `<div class="" style="display:grid; grid-template-columns: 1fr; grid-template-rows:30px; width:100% "><div class=""
+                  style="  height:100%; display:flex; align-items:center; justify-content:center; border-bottom:2px solid">${"D"}</div></div>`
+                    : ""
+                } 
+                ${
+                  sumE > 0
+                    ? `<div class="" style="display:grid; grid-template-columns: 1fr; grid-template-rows:30px; width:100% "><div class=""
+                  style="  height:100%; display:flex; align-items:center; justify-content:center; border-bottom:2px solid">${"E"}</div></div>`
+                    : ""
+                } 
+                ${
+                  sumF > 0
+                    ? `<div class="" style="display:grid; grid-template-columns: 1fr; grid-template-rows:30px; width:100% "><div class=""
+                  style="  height:100%; display:flex; align-items:center; justify-content:center; border-bottom:2px solid">${"F"}</div></div>`
+                    : ""
+                } 
+                ${
+                  sumG > 0
+                    ? `<div class="" style="display:grid; grid-template-columns: 1fr; grid-template-rows:30px; width:100% "><div class=""
+                  style="  height:100%; display:flex; align-items:center; justify-content:center; border-bottom:2px solid">${"G"}</div></div>`
+                    : ""
+                } 
+                ${
+                  sumH > 0
+                    ? `<div class="" style="display:grid; grid-template-columns: 1fr; grid-template-rows:30px; width:100% "><div class=""
+                  style="  height:100%; display:flex; align-items:center; justify-content:center; border-bottom:2px solid">${"H"}</div></div>`
+                    : ""
+                } 
+                ${
+                  sumI > 0
+                    ? `<div class="" style="display:grid; grid-template-columns: 1fr; grid-template-rows:30px; width:100% "><div class=""
+                  style="  height:100%; display:flex; align-items:center; justify-content:center; border-bottom:2px solid">${"I"}</div></div>`
+                    : ""
+                } 
+    
+            </div>
+            <div class="row-item" style="padding: 0;flex-direction: column;width: 100%;display: flex;overflow: hidden;">
+              <div class="title-item" style="width:100%;border-bottom: 2px solid; padding:15px 0;">
+                INCIDENTES / INCIDENTS TO VERIFY
+              </div>
+              <div class="incidents-container">
+              ${
+                sumA > 0
+                  ? `<div class="" style="display:grid; grid-template-columns: 110px 1fr; grid-template-rows:30px; ">
+              <div class=""
+                style="border-right: 2px solid; text-align:left;padding:0 50px; width:auto;text-align:center; height:100%; display:flex; align-items:center; border-bottom:2px solid">${"A"}</div> <div class=""
+                style=" text-align:left; display:flex; padding: 0 80px; width:100%; border-bottom: 2px solid; height:100%">
+    
+              </div></div>`
+                  : ""
+              } 
+              ${
+                sumB > 0
+                  ? `<div class="" style="display:grid; grid-template-columns: 110px 1fr; grid-template-rows:30px; ">
+                  <div class=""
+                    style="border-right: 2px solid; text-align:left;padding:0 50px; width:auto;text-align:center; height:100%; display:flex; align-items:center; border-bottom:2px solid">${"B"}</div>   <div class=""
+                    style=" text-align:left; display:flex; padding: 0 80px; width:100%; border-bottom: 2px solid; height:100%">
+    
+                  </div></div>`
+                  : ""
+              } 
+              ${
+                sumC > 0
+                  ? `<div class="" style="display:grid; grid-template-columns: 110px 1fr; grid-template-rows:30px; ">
+                  <div class=""
+                    style="border-right: 2px solid; text-align:left;padding:0 50px; width:auto;text-align:center; height:100%; display:flex; align-items:center; border-bottom:2px solid">${"C"}</div>   <div class=""
+                    style=" text-align:left; display:flex; padding: 0 80px; width:100%; border-bottom: 2px solid; height:100%">
+    
+                  </div></div>`
+                  : ""
+              } 
+              ${
+                sumD > 0
+                  ? `<div class="" style="display:grid; grid-template-columns: 110px 1fr; grid-template-rows:30px; ">
+                  <div class=""
+                    style="border-right: 2px solid; text-align:left;padding:0 50px; width:auto;text-align:center; height:100%; display:flex; align-items:center; border-bottom:2px solid">${"D"}</div>   <div class=""
+                    style=" text-align:left; display:flex; padding: 0 80px; width:100%; border-bottom: 2px solid; height:100%">
+    
+                  </div></div>`
+                  : ""
+              } 
+              ${
+                sumE > 0
+                  ? `<div class="" style="display:grid; grid-template-columns: 110px 1fr; grid-template-rows:30px; ">
+                  <div class=""
+                    style="border-right: 2px solid; text-align:left;padding:0 50px; width:auto;text-align:center; height:100%; display:flex; align-items:center; border-bottom:2px solid">${"E"}</div>   <div class=""
+                    style=" text-align:left; display:flex; padding: 0 80px; width:100%; border-bottom: 2px solid; height:100%">
+    
+                  </div></div>`
+                  : ""
+              } 
+              ${
+                sumF > 0
+                  ? `<div class="" style="display:grid; grid-template-columns: 110px 1fr; grid-template-rows:30px; ">
+                  <div class=""
+                    style="border-right: 2px solid; text-align:left;padding:0 50px; width:auto;text-align:center; height:100%; display:flex; align-items:center; border-bottom:2px solid">${"F"}</div>   <div class=""
+                    style=" text-align:left; display:flex; padding: 0 80px; width:100%; border-bottom: 2px solid; height:100%">
+    
+                  </div></div>`
+                  : ""
+              } 
+              ${
+                sumG > 0
+                  ? `<div class="" style="display:grid; grid-template-columns: 110px 1fr; grid-template-rows:30px; ">
+                  <div class=""
+                    style="border-right: 2px solid; text-align:left;padding:0 50px; width:auto;text-align:center; height:100%; display:flex; align-items:center; border-bottom:2px solid">${"G"}</div>   <div class=""
+                    style=" text-align:left; display:flex; padding: 0 80px; width:100%; border-bottom: 2px solid; height:100%">
+    
+                  </div></div>`
+                  : ""
+              } 
+              ${
+                sumH > 0
+                  ? `<div class="" style="display:grid; grid-template-columns: 110px 1fr; grid-template-rows:30px; ">
+                  <div class=""
+                    style="border-right: 2px solid; text-align:left;padding:0 50px; width:auto;text-align:center; height:100%; display:flex; align-items:center; border-bottom:2px solid">${"H"}</div>   <div class=""
+                    style=" text-align:left; display:flex; padding: 0 80px; width:100%; border-bottom: 2px solid; height:100%">
+    
+                  </div></div>`
+                  : ""
+              } 
+              ${
+                sumI > 0
+                  ? `<div class="" style="display:grid; grid-template-columns: 110px 1fr; grid-template-rows:30px; ">
+                  <div class=""
+                    style="border-right: 2px solid; text-align:left;padding:0 50px; width:auto;text-align:center; height:100%; display:flex; align-items:center; border-bottom:2px solid">${"I"}</div>   <div class=""
+                    style=" text-align:left; display:flex; padding: 0 80px; width:100%; border-bottom: 2px solid; height:100%">
+    
+                  </div></div>`
+                  : ""
+              }               
+              </div>
+    
+            </div>
+          </div>
+          <div class="footer">
+            <div style="">
+              <div class=""
+                style="display: grid; grid-template-columns: 591px 689px 1fr; border: 2px solid; box-sizing: border-box; align-content: center; grid-template-rows: auto; border-left: 0; border-right: 0; border-bottom:0;">
+    
+                <div class="row-item" style="padding:0; display:flex; flex-direction:column;">
+                  <div class=" title-item" style="width:100%;border-bottom: 2px solid; padding:15px 0;">
+                    REALIZO / INSPECTED BY</div>
+                  <div class="firma-container">
+                    <div class="firma"></div>
+                  </div>
+                </div>
+                <div class="row-item" style="padding:0; display:flex; flex-direction:column;">
+                  <div class=" title-item" style="width:100%;border-bottom: 2px solid; padding:15px 0;">
+                    OBSERVACIONES / COMMENTS</div>
+                  <div class="firma-container">
+                    <div class="firma"></div>
+                  </div>
+                </div>
+                <div class="row-item" style="padding:0; display:flex; flex-direction:column;">
+                  <div class=" title-item" style="width:100%;border-bottom: 2px solid; padding:15px 0;">
+                    OBSERVACIONES / COMMENTS</div>
+                  <div class="firma-container">
+                    <div class="firma"></div>
+                  </div>
+                </div>
+    
+    
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    </body>
+    
+    </html>
+    `;
+
+      const itemCount2 = i + 1; // Index starts from 0, so we need to add 1 to get item count
+
+      if (
+        itemCount2 % itemsPerPage === 0 &&
+        itemCount2 < remainingItems.length
+      ) {
+        html += `</div></div><div class="page-break"></div><div class="container" style="border-top:0;"> `;
+        pageIndex++;
+      }
+    }
+  }
+  html += `</div></div>`;
+
+  // Finally, add the page closure
+
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  await page.setContent(html);
+  const pdf = await page.pdf({
+    width: "500mm",
+    height: `313mm`,
+    printBackground: true,
+  });
+
+  await browser.close();
+
+  res.set({ "Content-Type": "application/pdf", "Content-Length": pdf.length });
+  res.send(pdf);
+});
+app.get("/reporte-de-inspeccion", async (req, res) => {
+  const browser = await puppeteer.launch({ headless: "new" });
+
+  const page = await browser.newPage();
+  await page.emulateMediaType("screen");
+  await page.setViewport({ width: 1920, height: 1080 });
+  const data = [
     {
       Item: "Item 1",
       "production date": "2023-07-01",
@@ -1416,15 +5174,15 @@ app.get("/reporte-de-inspeccion", async (req, res) => {
     sumI = 0;
 
   data.forEach((item) => {
-    sumA += item.A;
-    sumB += item.B;
-    sumC += item.C;
-    sumD += item.D;
-    sumE += item.E;
-    sumF += item.F;
-    sumG += item.G;
-    sumH += item.H;
-    sumI += item.I;
+    sumA += Number(item.A);
+    sumB += Number(item.B);
+    sumC += Number(item.C);
+    sumD += Number(item.D);
+    sumE += Number(item.E);
+    sumF += Number(item.F);
+    sumG += Number(item.G);
+    sumH += Number(item.H);
+    sumI += Number(item.I);
   });
   let pageIndex = 0;
   let pageIndexPdf = 1;
@@ -1838,14 +5596,14 @@ app.get("/reporte-de-inspeccion", async (req, res) => {
     }
   });
   // Ahora cambia itemsPerPage a 25 para las siguientes páginas
-  itemsPerPage = 24;
+  itemsPerPage = 25;
   remainingItems.forEach((item, index) => {
     // Tu lógica para agregar filas a la página aquí...
     html += `
             <div class="" id="table-data-${index + 1}"
             style="display: grid; grid-template-columns: 40px 551px 130px 223px 96px 130px 110px 1fr; border: 2px solid; box-sizing: border-box; align-content: center; grid-template-rows: 30px; border-left: 0; border-right: 0; border-bottom:0;">
             <div class="row-item " style="text-align:center;">
-              <h3><b>${index + 1}</b></h3>
+              <h3><b>${itemsPerPage + 1}</b></h3>
             </div>
             <div class="row-item " style="padding:0; display:flex; flex-direction:column;">
               <div class="sub-table-container">
@@ -1891,6 +5649,7 @@ app.get("/reporte-de-inspeccion", async (req, res) => {
       pageIndex++;
     }
   });
+
   // data.map((item, index) => {
   //   const itemCount = index + 1;
 
@@ -1984,15 +5743,15 @@ app.get("/reporte-de-inspeccion", async (req, res) => {
               <table style="width:100%; border-collapse: collapse; height:100%;">
                 <thead>
                   <tr>
-                    ${sumA > 0 ? `<th class="thead-th">${sumA}</th>` : ""} 
-                    ${sumB > 0 ? `<th class="thead-th">${sumB}</th>` : ""} 
-                    ${sumC > 0 ? `<th class="thead-th">${sumC}</th>` : ""} 
-                    ${sumD > 0 ? `<th class="thead-th">${sumD}</th>` : ""} 
-                    ${sumE > 0 ? `<th class="thead-th">${sumE}</th>` : ""} 
-                    ${sumF > 0 ? `<th class="thead-th">${sumF}</th>` : ""} 
-                    ${sumG > 0 ? `<th class="thead-th">${sumG}</th>` : ""} 
-                    ${sumH > 0 ? `<th class="thead-th">${sumH}</th>` : ""} 
-                    ${sumI > 0 ? `<th class="thead-th">${sumI}</th>` : ""} 
+                    ${sumA > 0 ? `<th class="table-th">${sumA}</th>` : ""} 
+                    ${sumB > 0 ? `<th class="table-th">${sumB}</th>` : ""} 
+                    ${sumC > 0 ? `<th class="table-th">${sumC}</th>` : ""} 
+                    ${sumD > 0 ? `<th class="table-th">${sumD}</th>` : ""} 
+                    ${sumE > 0 ? `<th class="table-th">${sumE}</th>` : ""} 
+                    ${sumF > 0 ? `<th class="table-th">${sumF}</th>` : ""} 
+                    ${sumG > 0 ? `<th class="table-th">${sumG}</th>` : ""} 
+                    ${sumH > 0 ? `<th class="table-th">${sumH}</th>` : ""} 
+                    ${sumI > 0 ? `<th class="table-th">${sumI}</th>` : ""} 
                   </tr>
                 </thead>
                 <tbody>
@@ -4317,7 +8076,8 @@ app.get("/reporte-por-horas", async (req, res) => {
       height: 90px;
       display: flex;
       align-items: center;
-      justify-content: c;
+      justify-content: center;
+      flex-direction:column;
     }
 
     .firma {
